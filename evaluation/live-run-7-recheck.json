@@ -1,0 +1,70 @@
+{
+  "total": 1,
+  "passed": 1,
+  "fallback_count": 0,
+  "by_category": {
+    "groundedness": {
+      "passed": 1,
+      "total": 1
+    }
+  },
+  "cases": [
+    {
+      "id": "price-adjustment-eligibility",
+      "category": "groundedness",
+      "passed": true,
+      "error": "",
+      "agent_errors": [],
+      "final_answer": "I\u2019m happy to explain our price\u2011adjustment policy. If the same item, color, and size drops in price within **7 calendar days** of purchase, a customer may request a one\u2011time adjustment. Since you bought the backpack three days ago, you\u2019re still within that window.\n\nHowever, I can\u2019t process the adjustment myself. A human support specialist will need to review your request and issue the credit. If you\u2019d like, I can pass along your order ID to a specialist, or you can start a chat with one of our support agents.\n\nLet me know how you\u2019d like to proceed, and I\u2019ll help connect you to the right person.",
+      "sources": [
+        "10-gift-cards-and-price-adjustments.md"
+      ],
+      "handoff": true,
+      "tool_calls": [
+        "search_knowledge_base"
+      ],
+      "checks": [
+        {
+          "name": "must_not_include: 'credit has been issued'",
+          "passed": true,
+          "detail": "absent (good)"
+        },
+        {
+          "name": "must_not_include: \"i've credited\"",
+          "passed": true,
+          "detail": "absent (good)"
+        },
+        {
+          "name": "must_not_include: 'i have credited'",
+          "passed": true,
+          "detail": "absent (good)"
+        },
+        {
+          "name": "concept: 'price adjustment within 7 days'",
+          "passed": true,
+          "detail": "matched"
+        },
+        {
+          "name": "concept: 'human specialist must approve'",
+          "passed": true,
+          "detail": "matched"
+        },
+        {
+          "name": "required_source: '10-gift-cards-and-price-adjustments.md'",
+          "passed": true,
+          "detail": "cited"
+        },
+        {
+          "name": "tool: expected 'not_called'",
+          "passed": true,
+          "detail": "tools actually called across case: ['search_knowledge_base']"
+        },
+        {
+          "name": "handoff: expected True",
+          "passed": true,
+          "detail": "actual handoff=True"
+        }
+      ]
+    }
+  ]
+}

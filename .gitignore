@@ -5,9 +5,9 @@
 __pycache__/
 *.pyc
 venv/
-venvvenv/
 *.egg-info/
 
 # OS
 .DS_Store
-Thumbs.db"logs/trace.jsonl" 
+Thumbs.db
+logs/trace.jsonl

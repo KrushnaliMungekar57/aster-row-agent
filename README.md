@@ -20,6 +20,21 @@ cp .env.example .env
 python main.py                              # interactive chat
 ```
 
+Optional web frontend (same agent, browser chat UI instead of the CLI):
+
+```bash
+pip install flask flask-cors                # not in requirements.txt, only needed for this
+python server.py                             # starts the API on http://127.0.0.1:5000
+# then open frontend/index.html directly in a browser (double-click, or File > Open)
+```
+
+`server.py` is a thin Flask wrapper around the same `SupportAgent`/`Session`
+classes `main.py` uses — no changes to `support_agent/` — with one
+in-memory `Session` per browser tab, keyed by a `session_id` the frontend
+generates. `frontend/index.html` is a static file opened straight from
+disk (not served by Flask); it talks to the API via CORS, hardcoded to
+`http://localhost:5000`.
+
 ## Environment variables
 
 All read via `support_agent/config.py`. See `.env.example` for the full
@@ -229,10 +244,15 @@ visible cases.
   key in `.env.example` below, the `.env.example` still defaulting to the
   deprecated model from bug diary #1, and a mismatch between the README's
   claimed default model and the real `config.py` default.
+- **Web frontend:** Claude (via claude.ai) built `server.py` and
+  `frontend/index.html` — the optional browser-based chat UI shown in the
+  Module 07 segment of the demo — as a thin layer over the existing
+  `support_agent` package, with no changes to the core agent logic.
 - **Demo video editing:** Claude (via claude.ai), using direct ffmpeg-based
   editing (trimming dead time, speed adjustment, section pop-up labels,
-  merging two source screen recordings into one final cut) to produce
-  `demo.mp4` from raw screen recordings.
+  merging two source screen recordings into one final cut, and adding the
+  Module 07 web-frontend segment) to produce `demo.mp4` from raw screen
+  recordings.
 
 **Two things worth being specific about, since precision here matters more
 than a clean narrative:**
@@ -257,8 +277,9 @@ than a clean narrative:**
 [![Demo](demo-thumbnail.png)](demo.mp4)
 
 *(A walkthrough with on-screen text/captions: a KB question with citations, an
-order lookup, a multi-turn exchange, a correct-refusal/handoff case, and the
-evaluation suite running. Click the thumbnail above to play — GitHub doesn't
+order lookup, a multi-turn exchange, a correct-refusal/handoff case, the
+evaluation suite running, and a Module 07 segment walking through the
+optional web frontend. Click the thumbnail above to play — GitHub doesn't
 autoplay video inline in READMEs.)*
 
 ## Repository contents
@@ -268,6 +289,7 @@ autoplay video inline in READMEs.)*
 ├── README.md
 ├── BUG_DIARY.md
 ├── main.py                      # CLI entrypoint
+├── server.py                    # web frontend backend
 ├── requirements.txt
 ├── .env.example
 ├── .gitignore
@@ -279,6 +301,8 @@ autoplay video inline in READMEs.)*
 │   ├── orders.py                  # order lookup tool, PII-safe field allow-list
 │   ├── retrieval.py               # BM25 index over knowledge-base/*.md
 │   └── logging_utils.py           # trace.jsonl writer
+├── frontend/
+│   └── index.html                # optional browser chat UI (open directly; calls server.py's API)
 ├── knowledge-base/                # 14 supplied policy/product docs
 ├── data/
 │   ├── orders.json

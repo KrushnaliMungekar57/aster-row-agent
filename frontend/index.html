@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aster & Row — Support</title>
+<style>
+  :root {
+    --bg: #f4f1ec;
+    --card: #ffffff;
+    --ink: #201c18;
+    --muted: #857c72;
+    --accent: #2f2a25;
+    --accent-soft: #ece6dc;
+    --user-bubble: #2f2a25;
+    --user-text: #ffffff;
+    --agent-bubble: #f1ede6;
+    --agent-text: #201c18;
+    --border: #e4ddd1;
+    --danger: #b3432b;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    display: flex;
+    justify-content: center;
+    padding: 32px 16px;
+    min-height: 100vh;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 4px 4px 8px;
+  }
+
+  .logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+  }
+
+  header h1 {
+    font-size: 18px;
+    margin: 0;
+    letter-spacing: -0.2px;
+  }
+
+  header p {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #7ea36a;
+    display: inline-block;
+    margin-right: 6px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.04);
+    overflow: hidden;
+  }
+
+  #chat {
+    padding: 20px;
+    min-height: 420px;
+    max-height: 560px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  #chat::-webkit-scrollbar { width: 8px; }
+  #chat::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; }
+
+  .row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  .row.user { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+  }
+
+  .row.user .avatar { background: #4a463f; }
+  .row.agent .avatar { background: var(--accent); }
+
+  .bubble {
+    max-width: 78%;
+    padding: 11px 15px;
+    border-radius: 16px;
+    font-size: 14.5px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .row.user .bubble {
+    background: var(--user-bubble);
+    color: var(--user-text);
+    border-bottom-right-radius: 4px;
+  }
+
+  .row.agent .bubble {
+    background: var(--agent-bubble);
+    color: var(--agent-text);
+    border-bottom-left-radius: 4px;
+  }
+
+  .meta {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 10.5px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  .tag.handoff {
+    background: #fbe9e4;
+    color: var(--danger);
+    border-color: #f0cfc4;
+  }
+
+  .typing {
+    display: flex;
+    gap: 4px;
+    padding: 4px 2px;
+  }
+
+  .typing span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: bounce 1.2s infinite ease-in-out;
+  }
+
+  .typing span:nth-child(2) { animation-delay: 0.15s; }
+  .typing span:nth-child(3) { animation-delay: 0.3s; }
+
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-4px); opacity: 1; }
+  }
+
+  form {
+    display: flex;
+    gap: 8px;
+    padding: 14px;
+    border-top: 1px solid var(--border);
+    background: #fbfaf8;
+  }
+
+  input {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-size: 14.5px;
+    outline: none;
+    background: white;
+    transition: border-color 0.15s;
+  }
+
+  input:focus { border-color: var(--accent); }
+
+  button {
+    padding: 0 20px;
+    border-radius: 10px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  button:hover { opacity: 0.9; }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 4px;
+  }
+
+  .suggestion {
+    font-size: 12.5px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .suggestion:hover { background: var(--accent-soft); }
+
+  footer {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--muted);
+    padding: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <header>
+    <div class="logo">A&amp;R</div>
+    <div>
+      <h1>Aster &amp; Row Support</h1>
+      <p><span class="status-dot"></span>AI agent · orders, returns &amp; shipping</p>
+    </div>
+  </header>
+
+  <div class="suggestions">
+    <div class="suggestion" data-q="What's your return policy?">KB question</div>
+    <div class="suggestion" data-q="What's the status of ORD-1007?">Order lookup</div>
+    <div class="suggestion" data-multi='["Do you ship to Canada?", "How long does it take?"]'>Multi-turn</div>
+    <div class="suggestion" data-q="What's the status of ORD-9999?">Refusal / handoff</div>
+  </div>
+
+  <div class="card">
+    <div id="chat"></div>
+    <form id="form">
+      <input id="input" placeholder="Ask about an order, return, or policy..." autocomplete="off" />
+      <button id="send" type="submit">Send</button>
+    </form>
+  </div>
+
+  <footer>Aster &amp; Row Support Agent · AI Agent Intern take-home demo</footer>
+
+</div>
+
+<script>
+const API = "http://localhost:5000";
+let sessionId = null;
+
+const chat = document.getElementById("chat");
+const form = document.getElementById("form");
+const input = document.getElementById("input");
+const sendBtn = document.getElementById("send");
+
+function scrollToBottom() {
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function addMessage(text, who, meta) {
+  const row = document.createElement("div");
+  row.className = "row " + who;
+
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  avatar.textContent = who === "user" ? "You" : "A&R";
+
+  const wrap = document.createElement("div");
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.textContent = text;
+  wrap.appendChild(bubble);
+
+  if (meta) {
+    const metaRow = document.createElement("div");
+    metaRow.className = "meta";
+
+    const sourceTag = document.createElement("span");
+    sourceTag.className = "tag";
+    sourceTag.textContent = meta.sources && meta.sources.length
+      ? "Sources: " + meta.sources.join(", ")
+      : "No source cited";
+    metaRow.appendChild(sourceTag);
+
+    if (meta.handoff) {
+      const handoffTag = document.createElement("span");
+      handoffTag.className = "tag handoff";
+      handoffTag.textContent = "Human review recommended";
+      metaRow.appendChild(handoffTag);
+    }
+
+    wrap.appendChild(metaRow);
+  }
+
+  row.appendChild(avatar);
+  row.appendChild(wrap);
+  chat.appendChild(row);
+  scrollToBottom();
+}
+
+function showTyping() {
+  const row = document.createElement("div");
+  row.className = "row agent";
+  row.id = "typing-row";
+
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  avatar.textContent = "A&R";
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble typing";
+  bubble.innerHTML = "<span></span><span></span><span></span>";
+
+  row.appendChild(avatar);
+  row.appendChild(bubble);
+  chat.appendChild(row);
+  scrollToBottom();
+}
+
+function hideTyping() {
+  const row = document.getElementById("typing-row");
+  if (row) row.remove();
+}
+
+async function sendMessage(message) {
+  addMessage(message, "user");
+  sendBtn.disabled = true;
+  showTyping();
+
+  try {
+    const res = await fetch(API + "/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, session_id: sessionId }),
+    });
+    const data = await res.json();
+    hideTyping();
+
+    if (data.error) {
+      addMessage("Error: " + data.error, "agent");
+    } else {
+      sessionId = data.session_id;
+      addMessage(data.answer, "agent", { sources: data.sources, handoff: data.handoff });
+    }
+  } catch (err) {
+    hideTyping();
+    addMessage("Could not reach the server. Make sure server.py is running on port 5000.", "agent");
+  } finally {
+    sendBtn.disabled = false;
+  }
+}
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const message = input.value.trim();
+  if (!message) return;
+  input.value = "";
+  sendMessage(message);
+});
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function sendMultiTurn(messages) {
+  for (let i = 0; i < messages.length; i++) {
+    await sendMessage(messages[i]);
+    if (i < messages.length - 1) await sleep(900); // brief pause so it reads as two natural turns, not a burst
+  }
+}
+
+document.querySelectorAll(".suggestion").forEach((el) => {
+  el.addEventListener("click", () => {
+    if (el.dataset.multi) {
+      sendMultiTurn(JSON.parse(el.dataset.multi));
+    } else {
+      sendMessage(el.dataset.q);
+    }
+  });
+});
+
+addMessage(
+  "Hi! I'm the Aster & Row support agent. Ask me about an order, our return policy, shipping, or anything else — or tap one of the demo scenarios above.",
+  "agent"
+);
+</script>
+
+</body>
+</html>

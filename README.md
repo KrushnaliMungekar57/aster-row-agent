@@ -315,7 +315,7 @@ autoplay video inline in READMEs.)*
 │   └── live-run-*.json             # saved live-run reports (full history)
 ├── tests/
 │   └── test_api_fallback.py        # retry/backoff regression test, mocked client
-├── logs/trace.jsonl                # structured per-turn trace
+├── logs/                          # trace.jsonl generated locally at runtime, git-ignored
 ├── inspect_trace.py                # grep the trace log by message substring
 ├── peek_report.py                  # inspect a saved evaluation report per-case
 └── regrade_report.py               # re-grade a saved report against current checks.py, zero API cost

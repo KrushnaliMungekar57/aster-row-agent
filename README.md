@@ -278,9 +278,10 @@ than a clean narrative:**
 
 *(A walkthrough with on-screen text/captions: a KB question with citations, an
 order lookup, a multi-turn exchange, a correct-refusal/handoff case, the
-evaluation suite running, and a Module 07 segment walking through the
-optional web frontend. Click the thumbnail above to play — GitHub doesn't
-autoplay video inline in READMEs.)*
+evaluation suite running, and a Module 07 segment walking through the optional
+web frontend. Click the thumbnail above, then click "View raw" on the page
+that follows — the file is large enough that GitHub can't preview it inline,
+but "View raw" opens/downloads it so it plays normally.)*
 
 ## Repository contents
 
